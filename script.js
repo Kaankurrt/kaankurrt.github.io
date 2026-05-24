@@ -240,9 +240,8 @@ document.getElementById('snow-toggle').onclick = () => {
 window.dispatchEvent(new Event('resize'));
 initAudioEngine();
 
-// ==========================================
-// 6. GITHUB API ENGINE (Projeler & Commitler)
-// ==========================================
+
+// 6. GITHUB API
 const githubUsername = "Kaankurrt"; // Kullanıcı adı
 
 async function fetchGithubData() {
@@ -271,7 +270,7 @@ async function fetchGithubData() {
         
         if (pushEvents.length > 0) {
             pushEvents.forEach(ev => {
-                // KRİTİK DÜZELTME: commits?.[0] yaparak undefined hatasını engelledik
+                // KRİTİK DÜZELTME: commits?.[0] yaparak undefined hatasını engelle
                 const commitMsg = ev.payload.commits?.[0]?.message || "Updated repository";
                 const repoName = ev.repo.name.split('/')[1];
                 ticker.innerHTML += `<span class="ticker-item"><i class="fas fa-code-branch"></i> pushed to ${repoName}: "${commitMsg}"</span>`;
@@ -287,9 +286,8 @@ async function fetchGithubData() {
 }
 fetchGithubData();
 
-// ==========================================
-// 7. YOUTUBE CAROUSEL ENGINE
-// ==========================================
+// 7. YOUTUBE CAROUSEL
+
 const myYouTubeVideos = [
     { id: "lYAhMkPNMQ4", title: "WHY IS IT ALWAYS 100?" }, 
     { id: "xonlrmTRM6M", title: "why this three song sounds EXACTLY the SAME?" },
@@ -311,9 +309,8 @@ function scrollYT(direction) {
     ytCarousel.scrollBy({ left: direction * 180, behavior: 'smooth' });
 }
 
-// ==========================================
-// 8. PHOTOGRAPHY GALLERY ENGINE
-// ==========================================
+
+// 8. PHOTOGRAPHY GALLERY
 const myPhotos = [
     "assets/photos/kaangrafi_1770006600_3823154485036638835_77245850966.webp", 
     "assets/photos/kaangrafi_1769975079_3823149872778594380_77245850966.webp",
@@ -333,7 +330,7 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 
 myPhotos.forEach((photoSrc) => {
-    // 1. Ana sayfadaki slider (alt galeri)
+    // 1. Ana sayfadaki slider
     const div = document.createElement('div');
     div.className = 'photo-item';
     div.style.backgroundImage = `url(${photoSrc})`;
@@ -371,7 +368,7 @@ function closeLightbox() {
 const cursor = document.getElementById('custom-cursor');
 
 document.addEventListener('mousemove', (e) => {
-    // 16px çıkarma sebebi tam ortasını yakalamak
+    // 8px çıkarma sebebi tam ortasını yakalamak
     cursor.style.transform = `translate(${e.clientX - 8}px, ${e.clientY - 8}px)`;
 });
 
@@ -463,9 +460,9 @@ function showFormToast(message) {
     }, 2500);
 }
 
-// Dynamic Rounded Favicon Engine
+// Dynamic Rounded Favicon
 function initDynamicFavicon() {
-    // Doğrudan CDN linki (CORS hatasını çözer)
+    // Doğrudan CDN linki
     const targetUrl = 'https://avatars.githubusercontent.com/Kaankurrt'; 
     const faviconSize = 64; 
 
@@ -483,7 +480,7 @@ function initDynamicFavicon() {
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
-        // Yuvarlak kesim alanı
+        // Yuvarlak kesim
         ctx.beginPath();
         ctx.arc(faviconSize / 2, faviconSize / 2, faviconSize / 2, 0, Math.PI * 2, true);
         ctx.closePath();
@@ -492,7 +489,7 @@ function initDynamicFavicon() {
         // Görseli çizme
         ctx.drawImage(img, 0, 0, faviconSize, faviconSize);
 
-        // Favicon güncelleme
+        // Favicon günc
         const roundedDataUrl = canvas.toDataURL('image/png');
         const faviconLink = document.getElementById('dynamic-favicon');
         if (faviconLink) {
@@ -505,5 +502,5 @@ function initDynamicFavicon() {
     };
 }
 
-// Yüklemede tetikle
+// Yüklerken tetikle
 window.addEventListener('load', initDynamicFavicon);
