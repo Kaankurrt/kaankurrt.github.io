@@ -1,0 +1,402 @@
+@font-face {
+    font-family: 'GoogleSansFlex';
+    src: url('assets/fonts/GoogleSansFlex_120pt-Regular.ttf') format('truetype');
+    font-weight: normal; font-style: normal;
+}
+@font-face {
+    font-family: 'GoogleSansFlex';
+    src: url('assets/fonts/GoogleSansFlex_120pt-Bold.ttf') format('truetype');
+    font-weight: bold; font-style: normal;
+}
+
+:root {
+    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-main: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --accent-glow: rgba(255, 255, 255, 0.8);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'GoogleSansFlex', sans-serif; }
+body { background: #030303; color: var(--text-main); overflow: hidden; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+.video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.35; }
+.video-bg video { width: 100%; height: 100%; object-fit: cover; }
+
+.crt-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+    background-size: 100% 3px, 3px 100%;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.85);
+}
+#snow-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 2; }
+
+/* NAVBAR SYSTEM */
+.top-nav {
+    width: 90%; max-width: 650px; height: 55px; margin-top: 25px;
+    background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: 16px;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 10;
+}
+.nav-brand { font-weight: bold; font-size: 1rem; letter-spacing: 0.5px; }
+.nav-links a { color: var(--text-muted); text-decoration: none; margin: 0 10px; font-size: 0.85rem; font-weight: bold; transition: 0.3s; }
+.nav-links a:hover, .nav-links a.active-link { color: var(--text-main); text-shadow: 0 0 8px var(--accent-glow); }
+.btn-switch { background: transparent; border: none; color: var(--text-muted); font-size: 1rem; margin-left: 10px; cursor: pointer; transition: 0.3s; }
+.btn-switch:hover { color: var(--text-main); }
+
+/* STRUCTURE */
+.content-wrapper {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex-grow: 1; width: 100%; gap: 15px; z-index: 5; padding-bottom: 30px;
+}
+.glass-panel {
+    background: var(--glass-bg); backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%);
+    border: 1px solid var(--glass-border); border-radius: 20px;
+    width: 90%; max-width: 550px; transition: all 0.4s ease;
+}
+
+.profile-panel { display: flex; flex-direction: column; align-items: center; padding: 35px 20px; }
+.content-panel { display: flex; flex-direction: column; padding: 30px; min-height: 220px; justify-content: flex-start; }
+.panel-inner-content { margin-top: 15px; font-size: 0.95rem; color: rgba(255,255,255,0.75); line-height: 1.6; }
+.section-title { font-size: 1.4rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+
+.avatar-glow img { width: 100px; height: 100px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 0 25px rgba(255,255,255,0.15); margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: bold; letter-spacing: 0.5px; }
+.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+
+/* Easter Egg Style */
+.earth-link { text-decoration: none; color: inherit; display: inline-block; }
+.location { color: rgba(255,255,255,0.3); font-size: 0.8rem; margin-top: 6px; transition: 0.2s ease; cursor: pointer; }
+.earth-link:hover .location { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6); }
+
+/* SOCIAL DOCK */
+.social-dock { display: flex; justify-content: center; align-items: flex-end; gap: 14px; margin-top: 25px; height: 45px; }
+.dock-icon { color: var(--text-muted); font-size: 22px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom; display: inline-block; }
+.dock-icon:hover { transform: scale(1.4); color: var(--text-main); text-shadow: 0 0 15px #fff; }
+
+/* AUDIO SYSTEM UI */
+.music-panel { padding: 15px 20px; display: flex; flex-direction: column; gap: 12px; }
+.player-core { display: flex; align-items: center; gap: 15px; width: 100%; }
+.music-cover-container { width: 55px; height: 55px; background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); position: relative; }
+.default-music-icon { font-size: 20px; color: var(--text-muted); }
+.music-cover { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+.hidden-cover { display: none !important; }
+
+.music-info { flex-grow: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+.track-details { font-size: 0.85rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress-area { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted); }
+.progress-bar-bg { flex-grow: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; cursor: pointer; position: relative; }
+.progress-fill { width: 0%; height: 100%; background: #fff; border-radius: 2px; box-shadow: 0 0 8px #fff; }
+.music-controls { display: flex; gap: 15px; font-size: 1.1rem; align-items: center; }
+.music-controls i { cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+.music-controls i:hover { color: #fff; text-shadow: 0 0 8px #fff; }
+
+/* WINAMP/MAC DOCK TRACK PLAYLIST MOTOR */
+.playlist-container { 
+    width: 100%; border-top: 1px solid rgba(255,255,255,0.06); 
+    padding-top: 15px; overflow: hidden; height: 45px; 
+    position: relative; display: flex; justify-content: center; align-items: center;
+}
+.playlist-dock { 
+    display: flex; align-items: center; gap: 0px; 
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1); 
+    position: absolute; left: 50%;
+}
+.playlist-item { 
+    font-size: 0.75rem; color: rgba(255, 255, 255, 0.25); 
+    white-space: nowrap; transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1); 
+    cursor: pointer; padding: 0 24px; position: relative; text-align: center;
+}
+
+/* SMART SHIFT ANIMATION STATES */
+.playlist-item.track-active { 
+    color: #ffffff; font-weight: bold; 
+    transform: scale(1.25) translateY(-1px); 
+    text-shadow: 0 0 12px rgba(255,255,255,0.7); 
+    opacity: 1; z-index: 10;
+}
+.playlist-item.track-left-adjacent { 
+    color: rgba(255, 255, 255, 0.55); 
+    transform: scale(0.95) translateX(-12px); 
+    opacity: 0.65; z-index: 5;
+}
+.playlist-item.track-right-adjacent { 
+    color: rgba(255, 255, 255, 0.55); 
+    transform: scale(0.95) translateX(12px); 
+    opacity: 0.65; z-index: 5;
+}
+.playlist-item.track-far {
+    opacity: 0.12; transform: scale(0.75); pointer-events: none;
+}
+
+/* SECTIONS CONTROL */
+.hidden-section { display: none !important; }
+.active-section { display: flex; animation: panelFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes panelFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+#toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); color: #000; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 0.85rem; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; z-index: 100; }
+#toast.show { bottom: 30px; opacity: 1; }
+
+/* =========================================
+   YENİ EKLENTİLER: PROJECTS & PHOTOGRAPHY
+========================================= */
+
+/* GitHub Ticker (Kayan Yazı) */
+.ticker-wrapper {
+    width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.2); border-radius: 8px;
+    padding: 8px 0; margin: 15px 0; position: relative;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.ticker-content { display: flex; white-space: nowrap; animation: scrollTicker 25s linear infinite; gap: 30px; }
+.ticker-item { font-size: 0.8rem; color: var(--accent-glow); font-family: monospace; }
+@keyframes scrollTicker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+/* GitHub Repo Grid */
+.github-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.repo-card {
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); padding: 12px;
+    border-radius: 10px; text-decoration: none; color: var(--text-main); transition: 0.3s;
+    display: flex; flex-direction: column; gap: 5px;
+}
+.repo-card:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-3px); }
+.repo-name { font-weight: bold; font-size: 0.85rem; }
+.repo-desc { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* YouTube Carousel */
+.yt-carousel-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; position: relative; }
+.yt-carousel {
+    display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth;
+    scrollbar-width: none; flex-grow: 1; padding: 10px 0;
+}
+.yt-carousel::-webkit-scrollbar { display: none; }
+.yt-thumb {
+    min-width: 160px; height: 90px; border-radius: 8px; background-size: cover; background-position: center;
+    border: 1px solid var(--glass-border); cursor: pointer; transition: 0.3s; position: relative;
+    display: flex; justify-content: center; align-items: center; text-decoration: none;
+}
+.yt-thumb:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.3); }
+.yt-thumb i { font-size: 24px; color: rgba(255,255,255,0.7); opacity: 0; transition: 0.3s; }
+.yt-thumb:hover i { opacity: 1; text-shadow: 0 0 10px red; }
+.carousel-btn {
+    background: var(--glass-bg); border: 1px solid var(--glass-border); color: white;
+    border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex;
+    justify-content: center; align-items: center; transition: 0.3s; flex-shrink: 0;
+}
+.carousel-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* Photography Scroll (Panel İçi) */
+.photo-scroll-container { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scroll-behavior: smooth; scrollbar-width: none; }
+.photo-scroll-container::-webkit-scrollbar { display: none; }
+.photo-item {
+    min-width: 120px; height: 160px; border-radius: 12px; background-size: cover; background-position: center;
+    border: 1px solid var(--glass-border); cursor: pointer; transition: 0.3s; flex-shrink: 0;
+}
+.photo-item:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+
+/* Modal & Lightbox Overlay */
+.glass-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.4s ease;
+}
+.hidden-modal { opacity: 0; pointer-events: none; visibility: hidden; }
+.close-modal-btn {
+    position: absolute; top: 30px; right: 30px; background: transparent; border: none;
+    color: white; font-size: 2rem; cursor: pointer; transition: 0.3s; z-index: 202;
+}
+.close-modal-btn:hover { color: red; transform: scale(1.1); }
+.modal-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+    width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: 20px;
+}
+.modal-grid::-webkit-scrollbar { width: 5px; }
+.modal-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+.grid-photo {
+    width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover;
+    cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+}
+.grid-photo:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.5); }
+.lightbox {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
+    justify-content: center; align-items: center; z-index: 201; cursor: pointer;
+}
+#lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+.lightbox-hint { color: var(--text-muted); margin-top: 15px; font-size: 0.9rem; }
+
+body { 
+    cursor: none !important; /* Tarayıcı imlecini tamamen yok ediyoruz */
+}
+
+button, a, .nav-links a, .play-btn, .photo-item, .earth-link {
+    cursor: none !important;
+}
+
+/* Custom Cursor'un kendi yapısı */
+#custom-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none; /* Bu satır çok önemli, imlecin click'leri yemesini engeller */
+    z-index: 9999999; /* Z-index'i bir tık daha artırdık */
+    width: 16px; 
+    height: 16px;
+    will-change: transform;
+}
+
+#custom-cursor img {
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Görselin tıklamayı engellemesini tamamen yasaklar */
+    display: block;
+}
+
+#cursor-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    /* Işığın nefes alması (sadece gölge animasyonu) */
+    animation: glow-breathe 2s infinite ease-in-out;
+}
+
+@keyframes glow-breathe {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); }
+    70% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)); }
+}
+
+a, button, input, [onclick] {
+    cursor: none !important; /* İmleci zorla gizli tut */
+}
+
+body, body * {
+    cursor: none !important;
+}
+
+/* Iletisim metni */
+.contact-info-text {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.contact-email {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.contact-email:hover {
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Form kutusu */
+.contact-form-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 22px;
+    width: 100%;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Input alanlari */
+.input-group input, 
+.input-group textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Textarea boyutlandırma engeli */
+.input-group textarea {
+    resize: none;
+    overflow-y: auto;
+}
+
+/* Odaklanma efekti */
+.input-group input:focus, 
+.input-group textarea:focus {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Placeholder rengi */
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    transition: color 0.2s ease;
+}
+
+/* Odaklaninca placeholder gizleme */
+.input-group input:focus::placeholder,
+.input-group textarea:focus::placeholder {
+    color: transparent;
+}
+
+/* Captcha ortalama */
+.captcha-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 4px 0;
+}
+
+/* Gonder butonu */
+.btn-send {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-send:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 8px var(--accent-glow);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+/* Textarea ozel scrollbar */
+.input-group textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+.input-group textarea::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 8px 0;
+}
+
+.input-group textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.input-group textarea::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}

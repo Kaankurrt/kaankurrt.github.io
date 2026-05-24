@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Control",
+    "artist": "Puddle of Mudd",
+    "path": "assets/music/Control - Puddle of Mudd.mp3",
+    "cover": "assets/covers/Cover of Control by Puddle of Mudd.jpg"
+  },
+ {
+    "name": "Ending Credits",
+    "artist": "Opeth",
+    "path": "assets/music/Ending Credits - Opeth.mp3",
+    "cover": "assets/covers/Cover of Ending Credits by Opeth.jpg"
+  },
+  {
+    "name": "Hysteria",
+    "artist": "Muse",
+    "path": "assets/music/Hysteria - Muse.mp3",
+    "cover": "assets/covers/Cover of Hysteria by Muse.jpg"
+  },
+  {
+    "name": "Kryptonite",
+    "artist": "3 Doors Down",
+    "path": "assets/music/Kryptonite - 3 Doors Down.mp3",
+    "cover": "assets/covers/Cover of Kryptonite by 3 Doors Down.jpg"
+  },
+  {
+    "name": "Last Resort",
+    "artist": "Papa Roach",
+    "path": "assets/music/Last Resort - Papa Roach.mp3",
+    "cover": "assets/covers/Cover of Last Resort by Papa Roach.jpg"
+  },
+  {
+    "name": "Like a Stone",
+    "artist": "Audioslave",
+    "path": "assets/music/Like a Stone - Audioslave.mp3",
+    "cover": "assets/covers/Cover of Like a Stone by Audioslave.jpg"
+  }
+
+]
